@@ -20,6 +20,9 @@ def pack(list):
             with py7zr.SevenZipFile(f'{ID}.7z', mode = "w") as archive:
                 archive.writeall(f"{ID}", f"data\stadium\FIFA\{ID}")
 
+# Progress 25.2.2022: Now we are able to pack what we want and have what we want.
+# Next: I will pack 7z's that has the empty file "complete.txt"
+
 # # Used for extracting a folder.
 # def unpack(ID):
 #     with py7zr.SevenZipFile(f"{ID}.7z", mode="r") as archive:
