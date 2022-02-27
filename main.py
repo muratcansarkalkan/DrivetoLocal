@@ -31,6 +31,9 @@ def pack(pathnew,d,de):
                     os.mkdir(de.get(v[2:4]))
                     with py7zr.SevenZipFile(f'{de.get(v[2:4])}\{v} - {k}.7z', mode = "w") as archive:
                         archive.writeall(f"{pathnew}/{v}", f"data\stadium\FIFA\{v}")
+                elif v[4:] == "FFFF":
+                    with py7zr.SevenZipFile(f'National Teams\{v} - {k}.7z', mode = "w") as archive:
+                        archive.writeall(f"{pathnew}/{v}", f"data\stadium\FIFA\{v}")                    
                 else:
                     if os.path.exists(f'{de.get(v[2:4])}\{v} - {k}.7z') == False:
                         with py7zr.SevenZipFile(f'{de.get(v[2:4])}\{v} - {k}.7z', mode = "w") as archive:
