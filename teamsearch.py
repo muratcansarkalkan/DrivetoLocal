@@ -2,7 +2,6 @@ import pandas as pd
 
 # DeMeppfines dataframe
 df = pd.read_excel('TeamsMini.xlsx')
-df = df.iloc[ : , 1:]
 
 # Defines dictionary. It sets new index as team. Then takes the transpose of dataframe, converts the dataframe to dictionary. Then we have a list output, we strip it from list.
 d = (df.set_index('Team').T.to_dict('records')[0])
