@@ -27,10 +27,14 @@ def pack(pathnew,d,de):
     # Now, if the complete.txt is included in the folder, then it will be packed.
             if os.path.isfile(f'{pathnew}/{v}/complete.txt') == True:
                 # It will also check if the file is already written.
-                if os.path.exists(f'{de.get(v[2:4])}\{v} - {k}.7z') == False:
+                if os.path.exists(f'{de.get(v[2:4])}') == False:
                     os.mkdir(de.get(v[2:4]))
                     with py7zr.SevenZipFile(f'{de.get(v[2:4])}\{v} - {k}.7z', mode = "w") as archive:
                         archive.writeall(f"{pathnew}/{v}", f"data\stadium\FIFA\{v}")
+                else:
+                    if os.path.exists(f'{de.get(v[2:4])}\{v} - {k}.7z') == False:
+                        with py7zr.SevenZipFile(f'{de.get(v[2:4])}\{v} - {k}.7z', mode = "w") as archive:
+                            archive.writeall(f"{pathnew}/{v}", f"data\stadium\FIFA\{v}")
 
 # Main function.
 if __name__ == "__main__":
