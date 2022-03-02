@@ -4,16 +4,18 @@ import py7zr
 import os
 import pandas as pd
 
-# Conversion of team database to a dictionary. Not yet implemented
+# Conversion of team database to a dictionary.
 def listofteams():
     df = pd.read_excel('TeamsMini.xlsx')
     d = (df.set_index('Team').T.to_dict('records')[0])
     return d
 
+# Conversion of country database to a dictionary.
 def country():
     dg = pd.read_excel('countriesnew.xlsx')
     de = (dg.set_index('Country').T.to_dict('records')[0])
     return de
+
 # Used for retrieving the available stadiums. This applies to end user. not me
 # def retrievelist(pathnew):
 #     # We used scandir instead of listdir. os.listdir(path) gives str. os.scandir(path) gave list of folders instead
