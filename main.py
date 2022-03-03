@@ -29,14 +29,19 @@ def pack(pathnew,d,de):
     # Now, if the complete.txt is included in the folder, then it will be packed.
             if os.path.isfile(f'{pathnew}/{v}/complete.txt') == True:
                 # It will also check if the file is already written.
-                if os.path.exists(f'{de.get(v[2:4])}') == False:
+                if v[4:] == "FFFF":
+                    if os.path.exists(f'National Teams\{v} - {k}.7z') == False:
+                    # Burada ulusal takımlar için sıfırdan klasör açılmaması lazım
+                        with py7zr.SevenZipFile(f'National Teams\{v} - {k}.7z', mode = "w") as archive:
+                            archive.writeall(f"{pathnew}/{v}", f"data\stadium\FIFA\{v}") 
+                    else:
+                        continue
+                elif os.path.exists(f'{de.get(v[2:4])}') == False:
                     os.mkdir(de.get(v[2:4]))
                     with py7zr.SevenZipFile(f'{de.get(v[2:4])}\{v} - {k}.7z', mode = "w") as archive:
-                        archive.writeall(f"{pathnew}/{v}", f"data\stadium\FIFA\{v}")
-                elif v[4:] == "FFFF":
-                    with py7zr.SevenZipFile(f'National Teams\{v} - {k}.7z', mode = "w") as archive:
-                        archive.writeall(f"{pathnew}/{v}", f"data\stadium\FIFA\{v}")                    
+                        archive.writeall(f"{pathnew}/{v}", f"data\stadium\FIFA\{v}")                
                 else:
+                    # Eğer paket yapılmadıysa yapsın
                     if os.path.exists(f'{de.get(v[2:4])}\{v} - {k}.7z') == False:
                         with py7zr.SevenZipFile(f'{de.get(v[2:4])}\{v} - {k}.7z', mode = "w") as archive:
                             archive.writeall(f"{pathnew}/{v}", f"data\stadium\FIFA\{v}")
