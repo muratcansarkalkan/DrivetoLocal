@@ -10,7 +10,8 @@ for pathe in Path().rglob('*.7z'):
     pathe = pathe.split('/')
     pathe = pathe[2]
     with py7zr.SevenZipFile(path1, mode="r") as archive:
-        if os.path.exists(f'{gamepath}/data/stadium/FIFA/{pathe[0:8]}') == False:
+        # if os.path.exists(f'{gamepath}/data/stadium/FIFA/{pathe[0:8]}') == False:
+        # Removed folder check function as the user will extract stadiums monthly.
             archive.extractall(path=gamepath)
-        else:
-            continue
+        # else:
+        #     continue
