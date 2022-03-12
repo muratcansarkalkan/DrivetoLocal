@@ -44,6 +44,9 @@ def checker(v):
     else:
         return False
 
+def writer(archive,v):
+    archive.writeall(f"{pathnew}/{v}", f"data/stadium/FIFA/{v}")
+
 # Used for packing a folder with a parent folder. mode r is for read. w is for write
 def pack(pathnew,d,de,date):
     for k, v in d.items():
@@ -55,19 +58,19 @@ def pack(pathnew,d,de,date):
                     # Creates extra folder for national teams
                         os.mkdir(f"FM Stadiums/{date}/National Teams")
                         with py7zr.SevenZipFile(f'FM Stadiums/{date}/National Teams/{v} - {k}.7z', mode = "w") as archive:
-                            archive.writeall(f"{pathnew}/{v}", f"data/stadium/FIFA/{v}") 
+                            writer(archive,v)  
                     else:
                         continue
                 elif os.path.exists(f'FM Stadiums/{date}/{de.get(v[2:4])}') == False:
                     if checker(v) == False:
                         os.mkdir(f"FM Stadiums/{date}/{de.get(v[2:4])}")
                         with py7zr.SevenZipFile(f'FM Stadiums/{date}/{de.get(v[2:4])}/{v} - {k}.7z', mode = "w") as archive:
-                            archive.writeall(f"{pathnew}/{v}", f"data/stadium/FIFA/{v}")                
+                            writer(archive,v)            
                 else:
                     # Eğer paket yapılmadıysa yapsın
                     if checker(v) == False:
                         with py7zr.SevenZipFile(f'FM Stadiums/{date}/{de.get(v[2:4])}/{v} - {k}.7z', mode = "w") as archive:
-                            archive.writeall(f"{pathnew}/{v}", f"data/stadium/FIFA/{v}")
+                            writer(archive,v) 
 
 # Main function.
 if __name__ == "__main__":
