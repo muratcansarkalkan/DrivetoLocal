@@ -12,4 +12,6 @@ The script that will identify missing files in local and download them from Goog
   <li>Progress 5.3.2022: Added extracting tool for 7z packages</li>
   <li>Progress 5.3.2022: The stadiums will be now packed by the date of script run, therefore added functions such as if folder is previously packed, date return</li>
   <li>Progress 5.3.2022: User will be able to view what is in the bundle before downloading the packages by viewing Contents-date.txt</li>
+  <li>Progress 12.3.2022: Removed repeated line in main.py and defined it in a new function</li>
+  <li>Progress 18.3.2022: Added Regex expression to teamsearch.py</li>
 </ul>
