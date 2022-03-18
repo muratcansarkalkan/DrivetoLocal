@@ -1,4 +1,6 @@
 import pandas as pd
+# Regular expression addition, ignorance of case
+import re
 
 # DeMeppfines dataframe
 df = pd.read_excel('TeamsMini.xlsx')
@@ -8,9 +10,10 @@ d = (df.set_index('Team').T.to_dict('records')[0])
 
 def searchfunc(d, name):
     for k,v in d.items():
-        if k.__contains__(name):
+        # Searchs name in k and ignores upper-lower case
+        if re.search(name, k, re.I):
             # prints key and value
-            print(v+" - "+k)          
+            print(v+" - "+k)           
 
 if __name__ == "__main__":
     name = input("search?")
