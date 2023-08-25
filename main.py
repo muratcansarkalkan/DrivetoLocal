@@ -5,22 +5,37 @@ import os
 import pandas as pd
 from datetime import datetime
 from pathlib import Path
+import json
+
+from pymongo import MongoClient
+
+# Connection to MongoDB
+client = MongoClient('mongodb+srv://muratcansarkalkan:muratcansarkalkan@cluster0.mcr0yu5.mongodb.net/fifam')
+fifam = client["fifam"]
+stadiums = fifam["stadiums"]
 
 # Conversion of team database to a dictionary.
 def listofteams():
-    df = pd.read_excel('TeamsMini.xlsx')
-    d = (df.set_index('Team').T.to_dict('records')[0])
-    return d
+    teams = "teamsMini.json"
+    data = json.loads(open(teams).read())
+    print("Reading team list...")
+    data_new = {item['Team']:item['UID'] for item in data}
+    return data_new
 
 # Conversion of country database to a dictionary.
 def country():
-    dg = pd.read_excel('countriesnew.xlsx')
-    de = (dg.set_index('Country').T.to_dict('records')[0])
-    return de
+    coun = "countriesnew.json"
+    data = json.loads(open(coun).read())
+    print("Reading country data...")
+    data_new = {item['Country']:item['Name'] for item in data}
+    return data_new
+
+# You need a directory as FM Stadiums. Sync this from GoogleDrive
 
 # Returns today
 def date():
     date = datetime.today().strftime('%Y-%m-%d')
+    print(f"Creating folder for {date}")
     # If the date folder does not exists then it creates
     if os.path.exists(f'FM Stadiums/{date}') == False:
         os.mkdir(f"FM Stadiums/{date}")
@@ -56,25 +71,44 @@ def pack(pathnew,d,de,date):
                 if v[4:] == "FFFF":
                     if checker(v) == False:
                     # Creates extra folder for national teams
-                        os.mkdir(f"FM Stadiums/{date}/National Teams")
+                        if os.path.exists(f'FM Stadiums/{date}/National Teams') == False:
+                            os.mkdir(f"FM Stadiums/{date}/National Teams")
+                            print(f"Writing archive for {k}...")
                         with py7zr.SevenZipFile(f'FM Stadiums/{date}/National Teams/{v} - {k}.7z', mode = "w") as archive:
                             writer(archive,v)  
+                        d = {"teamName": k, "teamId": v, "country": "National Teams", "date": date, "file": f'{v} - {k}.7z'}
+                        insert_d = stadiums.insert_one(d)
                     else:
                         continue
                 elif os.path.exists(f'FM Stadiums/{date}/{de.get(v[2:4])}') == False:
                     if checker(v) == False:
                         os.mkdir(f"FM Stadiums/{date}/{de.get(v[2:4])}")
+                        print(f"Writing archive for {k}...")
                         with py7zr.SevenZipFile(f'FM Stadiums/{date}/{de.get(v[2:4])}/{v} - {k}.7z', mode = "w") as archive:
-                            writer(archive,v)            
+                            writer(archive,v)   
+                        d = {"teamName": k, "teamId": v, "country": f"{de.get(v[2:4])}", "date": date, "file": f'{v} - {k}.7z'}
+                        insert_d = stadiums.insert_one(d)     
                 else:
                     # Eğer paket yapılmadıysa yapsın
                     if checker(v) == False:
+                        print(f"Writing archive for {k}...")
                         with py7zr.SevenZipFile(f'FM Stadiums/{date}/{de.get(v[2:4])}/{v} - {k}.7z', mode = "w") as archive:
                             writer(archive,v) 
+                        # adds stadium to MongoDB database.
+                        d = {"teamName": k, "teamId": f"0x{v}", "country": f"{de.get(v[2:4])}", "date": date, "file": f'{v} - {k}.7z'}
+                        insert_d = stadiums.insert_one(d)
+
+# teamName, teamId, country, date, file
+# teamName: k
+# teamId: v
+# country: {de.get(v[2:4])} OR National Teams
+# date: date
+# file: {v} - {k}.7z
 
 # Main function.
 if __name__ == "__main__":
-    pathbase=input("Specify the folder that you installed the game")
+# Game folder
+    pathbase="D:\Games\FIFA Manager 14"
     pathnew=pathbase+"\data\stadium\FIFA"
     teamlist = listofteams()
     coun = country()
