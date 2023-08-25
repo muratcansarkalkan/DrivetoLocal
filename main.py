@@ -58,7 +58,7 @@ def pack(pathnew,d,de,date,targetpath):
                         with py7zr.SevenZipFile(f'{targetpath}/{date}/National Teams/{v} - {k}.7z', mode = "w") as archive:
                             writer(archive,v)  
                         d = {"teamName": k, "teamId": f"0x{v}", "country": "National Teams", "date": date, "file": f'{v} - {k}.7z'}
-                        # insert_d = stadiums.insert_one(d)
+                        insert_d = stadiums.insert_one(d)
                     else:
                         continue
                 elif os.path.exists(f'{targetpath}/{date}/{de.get(v[2:4])}') == False:
@@ -68,7 +68,7 @@ def pack(pathnew,d,de,date,targetpath):
                         with py7zr.SevenZipFile(f'{targetpath}/{date}/{de.get(v[2:4])}/{v} - {k}.7z', mode = "w") as archive:
                             writer(archive,v)
                         d = {"teamName": k, "teamId": f"0x{v}", "country": f"{de.get(v[2:4])}", "date": date, "file": f'{v} - {k}.7z'}
-                        # insert_d = stadiums.insert_one(d)     
+                        insert_d = stadiums.insert_one(d)     
                 else:
                     # Eğer paket yapılmadıysa yapsın
                     if checker(v) == False:
@@ -77,7 +77,7 @@ def pack(pathnew,d,de,date,targetpath):
                             writer(archive,v) 
                         # adds stadium to MongoDB database.
                         d = {"teamName": k, "teamId": f"0x{v}", "country": f"{de.get(v[2:4])}", "date": date, "file": f'{v} - {k}.7z'}
-                        # insert_d = stadiums.insert_one(d)
+                        insert_d = stadiums.insert_one(d)
 
 # Main function.
 if __name__ == "__main__":

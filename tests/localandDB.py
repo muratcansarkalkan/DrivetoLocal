@@ -12,7 +12,6 @@ parent_dir = os.path.dirname(current_dir)
 # Construct the path to the .env file in the parent directory
 env_file_path = os.path.join(parent_dir, '.env')
 fm_stadia_path = os.path.join(parent_dir, 'FM Stadiums')
-print(fm_stadia_path)
 
 # Load variables from the .env file
 load_dotenv(dotenv_path=env_file_path)
@@ -26,7 +25,6 @@ fifam = client["fifam"]
 stadiums = fifam["stadiums"]
 
 getStadia = stadiums.find({})
-
 mongoStadia = []
 # Obtains .7z files included in MongoDB database
 for document in getStadia:
@@ -41,12 +39,14 @@ for root, dirs, files in os.walk(fm_stadia_path):
     [dirs.remove(d) for d in list(dirs) if d in exclude]
     for file in files:
         if file.endswith(".7z"):
-             localStadia.append(file)
+            localStadia.append(file)
 
-elements_not_in_a = [element for element in localStadia if element not in mongoStadia]
+elements_not_in_local = [element for element in mongoStadia if element not in localStadia]
+elements_not_in_mongo = [element for element in localStadia if element not in mongoStadia]
 
-if len(elements_not_in_a) > 0:
-    print(elements_not_in_a)
+class TestStringMethods(unittest.TestCase):
+    def test_checkfiletotal(self):
+        self.assertEqual(len(localStadia), len(mongoStadia), (f'Missing in local drive: {elements_not_in_local}, Missing in MongoDB collection: {elements_not_in_mongo}'))
 
-else:
-    print('All good! The local database and MongoDB database is in sync.')
+if __name__ == '__main__':
+    unittest.main()
