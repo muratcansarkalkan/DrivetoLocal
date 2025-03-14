@@ -1,0 +1,15 @@
+Update list of leagues and teams every year. No need to update stadium DB.
+
+1 - get FIFAM UIDS CSV file from FIFAM-CONVERTER/FIFAM-CONVERTER/DB folder at FM Project
+2 - edit it so it only has columns in mongo DB and ADD NATIONAL TEAMS
+3 - have all leagues and team IDs in one CSV with script in Team Spreadsheet
+4 - sort leagues depending on level
+5 - add new leagues onto the big CSV file
+6 - login to mongo DB
+7 - drop teams collection
+8 - create new collection as teams and import simplified FIFAM UIDS CSV file
+9 - drop leagues collection
+10 - create new collection as leagues and import simplified FIFAM UIDS CSV file
+11 - export teams into new csv
+12 - convert columns like fifamteams.xlsx
+13 - run script that converts it to json
